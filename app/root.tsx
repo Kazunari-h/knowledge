@@ -1,4 +1,4 @@
-import type { LinksFunction } from "@remix-run/cloudflare";
+import type { LinksFunction, LoaderFunction } from "@remix-run/cloudflare";
 import {
     Links,
     LiveReload,
@@ -9,14 +9,22 @@ import {
 } from "@remix-run/react";
 
 import stylesheet from "~/globals.css";
+import { cssBundleHref } from "@remix-run/css-bundle";
+
+import { rootAuthLoader } from "@clerk/remix/ssr.server";
+import { ClerkApp, ClerkErrorBoundary } from "@clerk/remix";
 
 export const links: LinksFunction = () => [
     { rel: "stylesheet", href: stylesheet },
+    ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
 ];
 
-export default function App() {
+export const loader: LoaderFunction = (args) => rootAuthLoader(args);
+export const ErrorBoundary = ClerkErrorBoundary();
+
+function App() {
     return (
-        <html lang="en">
+        <html lang="ja">
             <head>
                 <meta charSet="utf-8" />
                 <meta
@@ -35,3 +43,5 @@ export default function App() {
         </html>
     );
 }
+
+export default ClerkApp(App);
