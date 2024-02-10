@@ -1,4 +1,5 @@
 import type { MetaFunction } from "@remix-run/cloudflare";
+import { SignUp } from "@clerk/remix";
 
 export const meta: MetaFunction = () => {
     return [
@@ -8,5 +9,9 @@ export const meta: MetaFunction = () => {
 };
 
 export default function Signup() {
-    return <p>Signup</p>;
+    return (
+        <div className="w-screen h-screen grid place-items-center">
+            <SignUp />
+        </div>
+    );
 }
