@@ -6,6 +6,61 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
 }
+
+model User {
+  id       Int      @id @default(autoincrement())
+  name     String?
+  email    String   @unique
+  password String
+  type     String   @default("student")
+  status   String   @default("active")
+  posts    Post[]
+  profile  Profile?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  slug      String   @unique
+  title     String
+  content   String
+  topic     String
+  authorId  Int
+  author    User     @relation(fields: [authorId], references: [id])
+  status    String   @default("draft")
+  categoryId Int
+  category  Category? @relation(fields: [categoryId], references: [id])
+  publishedAt DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([authorId], name: "authorId")
+  @@index([categoryId], name: "categoryId")
+
+}
+
+model Profile {
+  userId    Int      @id @default(autoincrement())
+  bio       String?
+  imageURL  String?
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId], name: "userId")
+}
+
+model Category {
+  id        Int      @id @default(autoincrement())
+  name      String
+  slug      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  posts     Post[]
+}
+
