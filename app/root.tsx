@@ -16,7 +16,7 @@ import { ClerkApp, ClerkErrorBoundary } from "@clerk/remix";
 
 export const links: LinksFunction = () => [
     { rel: "stylesheet", href: stylesheet },
-    ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
+    // ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
 ];
 
 export const loader: LoaderFunction = (args) => rootAuthLoader(args);
@@ -24,7 +24,7 @@ export const ErrorBoundary = ClerkErrorBoundary();
 
 function App() {
     return (
-        <html lang="ja">
+        <html lang="ja" className="w-screen min-h-screen">
             <head>
                 <meta charSet="utf-8" />
                 <meta
@@ -34,7 +34,7 @@ function App() {
                 <Meta />
                 <Links />
             </head>
-            <body>
+            <body className="w-screen min-h-screen flex flex-col">
                 <Outlet />
                 <ScrollRestoration />
                 <Scripts />
