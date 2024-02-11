@@ -40,50 +40,57 @@ export default function Index() {
                         "学生たちの間で知識と経験を共有し、学びを深めるためのプラットフォームです。ここでは、最新の研究成果や学習テクニック、効率的なノートの取り方から試験対策まで、幅広いトピックに関する記事が共有されています。皆で協力して学問の壁を乗り越え、目指す未来への一歩を踏み出しましょう。この共有サービスを通じて、学生一人ひとりが持つポテンシャルを最大限に引き出し、知識の輪を広げていくことができます。",
                     children: (
                         <ul className="grid gap-4 grid-cols-2">
-                            <li className="bg-white border p-6 rounded-lg">
-                                <article className="flex gap-3">
-                                    <div>
-                                        <div className="rounded-full w-10 h-10 border grid place-items-center">
-                                            <Bot className="h-6 w-6 stroke-1 stroke-cyan-500" />
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <p className="text-zinc-500 text-xs flex gap-2">
-                                            <Link
-                                                to="/"
-                                                className=" hover:text-cyan-500 transition hover:underline underline-offset-2"
-                                            >
-                                                hirosawak
-                                            </Link>
-                                        </p>
-                                        <div className="text-zinc-500 text-xs flex justify-between items-center mb-2">
-                                            <time>2021/10/10</time>
-                                        </div>
-                                        <Link to="/" className="my-3 block">
-                                            <h2 className="text-xl text-zinc-800 hover:text-cyan-500 font-bold line-clamp-2 leading-7 transition">
-                                                タイトルが入ります
-                                                タイトルが入ります
-                                                タイトルが入ります
-                                                タイトルが入ります
-                                                タイトルが入ります
-                                            </h2>
-                                        </Link>
-                                        <p className="text-zinc-500 text-xs my-2">
-                                            <Button
-                                                variant="outline"
-                                                size="sm"
-                                                className="group"
-                                            >
-                                                <Heart className=" transition group-hover:fill-pink-500 stroke-pink-500 inline-block w-4 h-4 mr-1" />
-                                                <p>120</p>
-                                            </Button>
-                                        </p>
-                                    </div>
-                                </article>
-                            </li>
-                            <li className="bg-white border px-4 py-8 rounded-lg"></li>
-                            <li className="bg-white border px-4 py-8 rounded-lg"></li>
-                            <li className="bg-white border px-4 py-8 rounded-lg"></li>
+                            {Array.from({ length: 10 }).map((_, index) => {
+                                return (
+                                    <li
+                                        key={index}
+                                        className="bg-white border p-6 rounded-lg"
+                                    >
+                                        <article className="flex gap-3">
+                                            <div>
+                                                <div className="rounded-full w-10 h-10 border grid place-items-center">
+                                                    <Bot className="h-6 w-6 stroke-1 stroke-cyan-500" />
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <p className="text-zinc-500 text-xs flex gap-2">
+                                                    <Link
+                                                        to="/"
+                                                        className=" hover:text-cyan-500 transition hover:underline underline-offset-2"
+                                                    >
+                                                        hirosawak
+                                                    </Link>
+                                                </p>
+                                                <div className="text-zinc-500 text-xs flex justify-between items-center mb-2">
+                                                    <time>2021/10/10</time>
+                                                </div>
+                                                <Link
+                                                    to="/"
+                                                    className="my-3 block"
+                                                >
+                                                    <h2 className="text-xl text-zinc-800 hover:text-cyan-500 font-bold line-clamp-2 leading-7 transition">
+                                                        タイトルが入ります
+                                                        タイトルが入ります
+                                                        タイトルが入ります
+                                                        タイトルが入ります
+                                                        タイトルが入ります
+                                                    </h2>
+                                                </Link>
+                                                <p className="text-zinc-500 text-xs my-2">
+                                                    <Button
+                                                        variant="outline"
+                                                        size="sm"
+                                                        className="group"
+                                                    >
+                                                        <Heart className=" transition group-hover:fill-pink-500 stroke-pink-500 inline-block w-4 h-4 mr-1" />
+                                                        <p>120</p>
+                                                    </Button>
+                                                </p>
+                                            </div>
+                                        </article>
+                                    </li>
+                                );
+                            })}
                         </ul>
                     ),
                 },
