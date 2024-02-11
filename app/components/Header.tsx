@@ -7,8 +7,9 @@ import logo from "app/assets/images/logo.png";
 export const Header = () => {
     return (
         <div className="flex justify-between w-screen px-8 lg:px-0 h-16 items-center mx-auto max-w-6xl">
-            <h1 className="font-bold text-2xl">
-                <img src={logo} alt="logo" className="h-12" />
+            <h1 className="text-4xl text-zinc-700 font-extrabold tracking-wide first-letter:text-cyan-500">
+                {/* <img src={logo} alt="logo" className="h-12" /> */}
+                Knowledge
             </h1>
             <div className="flex gap-6 items-center">
                 <Button variant="ghost" size="icon">
