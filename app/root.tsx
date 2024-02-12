@@ -16,7 +16,7 @@ import { ClerkApp, ClerkErrorBoundary } from "@clerk/remix";
 
 export const links: LinksFunction = () => [
     { rel: "stylesheet", href: stylesheet },
-    // ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
+    ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
 ];
 
 export const loader: LoaderFunction = (args) => rootAuthLoader(args);

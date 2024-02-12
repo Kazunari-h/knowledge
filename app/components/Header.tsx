@@ -1,3 +1,4 @@
+import { Link } from "@remix-run/react";
 import { Button } from "@/components/ui/button";
 import { UserButton } from "@clerk/remix";
 import { Bell, Search } from "lucide-react";
@@ -9,7 +10,7 @@ export const Header = () => {
         <div className="flex justify-between w-screen px-8 lg:px-0 h-16 items-center mx-auto max-w-6xl">
             <h1 className="text-4xl text-zinc-700 font-extrabold tracking-wide first-letter:text-cyan-500">
                 {/* <img src={logo} alt="logo" className="h-12" /> */}
-                Knowledge
+                <Link to="/">Knowledge</Link>
             </h1>
             <div className="flex gap-6 items-center">
                 <Button variant="ghost" size="icon">
@@ -22,7 +23,9 @@ export const Header = () => {
                 {/* <Button variant="outline">
                     <a href="https://ui.shadcn.com/docs">公式 Document</a>
                 </Button> */}
-                <Button className=" rounded-full bg-cyan-500">投稿する</Button>
+                <Button className=" rounded-full bg-cyan-500" asChild>
+                    <Link to="/articles/new">投稿する</Link>
+                </Button>
             </div>
         </div>
     );
