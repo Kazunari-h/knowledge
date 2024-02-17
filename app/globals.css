@@ -84,3 +84,13 @@
     --md-editor-font-family: HackGen, "Helvetica Neue", Helvetica, Arial,
         sans-serif !important;
 }
+
+.w-md-editor-text-input {
+    letter-spacing: 0.05em !important;
+    @apply tracking-wider font-medium;
+}
+
+.w-md-editor-text-input::placeholder {
+    color: 240 5% 64.9%;
+    @apply tracking-wider font-medium;
+}
