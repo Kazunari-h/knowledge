@@ -10,3 +10,9 @@ compatibility_date = "2023-04-20"
 
 [build]
   command = "npm run build"
+
+[vars]
+  CLERK_AFTER_SIGN_IN_URL = "/"
+  CLERK_AFTER_SIGN_UP_URL = "/"
+  CLERK_SIGN_IN_URL = "/signin"
+  CLERK_SIGN_UP_URL = "/signup"
