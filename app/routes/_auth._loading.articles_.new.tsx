@@ -17,7 +17,7 @@ export default function Articles() {
     const [value, setValue] = useState("# Hello World");
 
     return (
-        <div className="py-6 px-4 grid gap-6">
+        <div className="py-6 grid gap-6">
             <h1>{location.pathname}</h1>
             <div className="grid w-full items-center gap-2">
                 <Label htmlFor="title">title</Label>
@@ -29,11 +29,8 @@ export default function Articles() {
                 />
             </div>
 
-            <div className="grid w-full gap-2">
-                <Label htmlFor="message">Your message</Label>
-            </div>
-
             <div>
+                <Label htmlFor="message">Your message</Label>
                 <MDEditor
                     value={value}
                     onChange={(v) => setValue(v || "")}
@@ -42,7 +39,10 @@ export default function Articles() {
                     highlightEnable={true}
                     visibleDragbar={true}
                     height="auto"
-                    className="[&>.w-md-editor-bar]:hidden !shadow-none !rounded-lg border min-h-[500px] bg-white p-4"
+                    textareaProps={{
+                        placeholder: "Please **Input** Markdown",
+                    }}
+                    className="[&>.w-md-editor-bar]:hidden !shadow-none !rounded-lg border min-h-[500px] bg-white px-1 py-2 mt-2"
                 />
             </div>
         </div>

@@ -7,7 +7,7 @@ export default function Articles() {
             <main className="max-w-6xl w-full leading-6 tracking-wider">
                 <Outlet />
             </main>
-            <aside className="p-4 bg-white rounded-xl border max-w-sm w-full">
+            {/* <aside className="p-4 bg-white rounded-xl border max-w-sm w-full">
                 <ul className="grid gap-2">
                     <li className="aa">
                         <Button asChild variant={"link"}></Button>
@@ -93,7 +93,7 @@ export default function Articles() {
                         </Button>
                     </li>
                 </ul>
-            </aside>
+            </aside> */}
         </div>
     );
 }
