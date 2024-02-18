@@ -1,6 +1,20 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+generator zod {
+  provider                         = "zod-prisma-types"
+  output                           = "./generated/zod" // 出力ディレクトリの指定
+  useMultipleFiles                 = true // スキーマを複数ファイルに分割
+  writeBarrelFiles                 = false // バレルファイルの生成を無効化
+  createInputTypes                 = false // 入力タイプの生成を無効化
+  createModelTypes                 = true // モデルタイプの生成を有効化
+  addInputTypeValidation           = true // 入力タイプに対するバリデーションの追加
+  createOptionalDefaultValuesTypes = true // デフォルト値を持つフィールドをオプショナルに
+  createRelationValuesTypes        = true // リレーションフィールドを含むタイプの生成
+  createPartialTypes               = true // 全フィールドをオプショナルにしたパーシャルタイプの生成
+  useDefaultValidators             = false // Zodのデフォルトバリデータの使用を無効化
+}
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -26,10 +40,9 @@ model User {
 
 model Post {
   id        Int      @id @default(autoincrement())
-  slug      String   @unique
+  uuid      String   @unique
   title     String
   content   String
-  topic     String
   authorId  Int
   author    User     @relation(fields: [authorId], references: [id])
   status    String   @default("draft")
@@ -38,6 +51,7 @@ model Post {
   publishedAt DateTime?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  tags      PostTag[]
 
   @@index([authorId], name: "authorId")
   @@index([categoryId], name: "categoryId")
@@ -64,3 +78,24 @@ model Category {
   posts     Post[]
 }
 
+model Tag {
+  id        Int      @id @default(autoincrement())
+  name      String
+  slug      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  posts     PostTag[]
+  
+  @@index([slug], name: "slug")
+}
+
+model PostTag {
+  postId Int
+  tagId  Int
+  post   Post @relation(fields: [postId], references: [id])
+  tag    Tag  @relation(fields: [tagId], references: [id])
+
+  @@id([postId, tagId], name: "postId_tagId")
+  @@index([postId], name: "postId")
+  @@index([tagId], name: "tagId")
+}
