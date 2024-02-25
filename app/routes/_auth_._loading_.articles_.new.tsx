@@ -1,6 +1,6 @@
 import type { LinksFunction, LoaderFunction } from "@remix-run/cloudflare";
 import { useState } from "react";
-import { useLoaderData, useNavigate } from "@remix-run/react";
+import { useLoaderData, useNavigate, Form } from "@remix-run/react";
 import { ArrowLeft } from "lucide-react";
 
 import { Label } from "@/components/ui/label";
@@ -16,15 +16,25 @@ import {
 } from "@/components/ui/select";
 
 import { TooltipButton } from "~/components/TooltipButton";
+import { DatePicker } from "~/components/DatePicker";
+import { DateTimePicker } from "~/components/DateTimePicker";
+import { Footer } from "~/components/Footer";
 
 import MDEditor from "@uiw/react-md-editor";
+import externalStyles from "@uiw/react-md-editor/markdown-editor.css";
 
 import { Category, PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 
-import externalStyles from "@uiw/react-md-editor/markdown-editor.css";
-import { DatePicker } from "~/components/DatePicker";
-import { Footer } from "~/components/Footer";
+import {
+    useForm,
+    useInputControl,
+    getFormProps,
+    getInputProps,
+    getTextareaProps,
+} from "@conform-to/react";
+import { parseWithZod } from "@conform-to/zod";
+import { PostSchema } from "../../prisma/generated/zod/modelSchema/PostSchema";
 
 export const links: LinksFunction = () => [
     { rel: "stylesheet", href: externalStyles },
@@ -60,12 +70,26 @@ export const loader: LoaderFunction = async ({ context }) => {
 
 export default function Articles() {
     const data = useLoaderData<LoaderData>();
-    const [title, setTitle] = useState("");
-    const [content, setContent] = useState("");
+    // const [content, setContent] = useState("");
     const navigate = useNavigate();
 
+    const [form, fields] = useForm({
+        onValidate({ formData }) {
+            return parseWithZod(formData, { schema: PostSchema });
+        },
+    });
+
+    const title = useInputControl(fields.title);
+    const content = useInputControl(fields.content);
+    const publishedAt = useInputControl(fields.publishedAt);
+    const categoryId = useInputControl(fields.categoryId);
+
     return (
-        <>
+        <Form
+            method="POST"
+            {...getFormProps(form)}
+            className="w-screen min-h-screen flex flex-col bg-zinc-100"
+        >
             <div className="flex justify-between w-screen px-8 lg:px-0 h-16 items-center mx-auto max-w-6xl">
                 <TooltipButton
                     trigger={
@@ -115,18 +139,22 @@ export default function Articles() {
                             >
                                 <div>
                                     <input
-                                        type="text"
-                                        value={title}
+                                        {...getInputProps(fields.title, {
+                                            type: "text",
+                                        })}
+                                        value={title.value}
                                         onChange={(e) =>
-                                            setTitle(e.target.value)
+                                            title.change(e.target.value)
                                         }
+                                        onFocus={title.focus}
+                                        onBlur={title.blur}
                                         className="block w-full outline-none focus:outline-none active:outline-none px-2.5 py-2 font-['HackGen'] text-lg placeholder:!text-[240_5%_64.9%] placeholder:font-light tracking-wider"
                                         placeholder="タイトル"
                                     />
 
                                     <MDEditor
-                                        value={content}
-                                        onChange={(v) => setContent(v || "")}
+                                        value={content.value}
+                                        onChange={(v) => content.change(v)}
                                         hideToolbar={true}
                                         preview="edit"
                                         highlightEnable={true}
@@ -134,6 +162,7 @@ export default function Articles() {
                                         height="auto"
                                         textareaProps={{
                                             placeholder: "記事の内容",
+                                            // ...getTextareaProps(fields.content),
                                         }}
                                         className="[&>.w-md-editor-bar]:hidden !shadow-none !rounded-lg min-h-[500px] bg-white tracking-wider font-medium opacity-100 text-lg"
                                     />
@@ -144,17 +173,17 @@ export default function Articles() {
                                 className="bg-white py-6 px-8 rounded-lg shadow-md w-full"
                             >
                                 <h1 className=" text-4xl font-bold leading-8 tracking-wider mt-4 mb-6">
-                                    {title}
+                                    {title.value}
                                 </h1>
                                 {content && (
                                     <MDEditor.Markdown
-                                        source={content}
+                                        source={content.value}
                                         className="[&>.w-md-editor-bar]:hidden !shadow-none !rounded-lg min-h-[500px] bg-white tracking-wider prose-sm w-full max-w-full"
                                     />
                                 )}
                             </TabsContent>
                         </Tabs>
-                        <div className="grid w-full items-center gap-2">
+                        {/* <div className="grid w-full items-center gap-2">
                             <Label htmlFor="tag">タグ</Label>
                             <Input
                                 className="w-full block placeholder:text-muted-foreground/60"
@@ -162,77 +191,33 @@ export default function Articles() {
                                 id="tag"
                                 placeholder="タグ"
                             />
-                        </div>
+                        </div> */}
 
-                        <div className="grid justify-items-center items-stretch gap-2 grid-cols-3">
+                        <div className="grid justify-items-center items-stretch gap-2 grid-cols-2">
                             <div className="grid w-full items-center gap-2">
                                 <Label htmlFor="title">公開日</Label>
-                                <DatePicker />
-                            </div>
-                            <div className="grid w-full items-center gap-2">
-                                <Label htmlFor="title">公開時間</Label>
-                                <div className="flex items-center">
-                                    <Select>
-                                        <SelectTrigger className="w-20">
-                                            <SelectValue placeholder="HH" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            {Array.from(
-                                                { length: 24 },
-                                                (_, i) => {
-                                                    return (
-                                                        <SelectItem
-                                                            key={i}
-                                                            value={`${i}`}
-                                                        >
-                                                            <div className="flex items-center gap-2">
-                                                                <span>
-                                                                    {`${i}`.padStart(
-                                                                        2,
-                                                                        "0",
-                                                                    )}
-                                                                </span>
-                                                            </div>
-                                                        </SelectItem>
-                                                    );
-                                                },
-                                            )}
-                                        </SelectContent>
-                                    </Select>
-                                    <span className="px-1 text-lg">:</span>
-                                    <Select>
-                                        <SelectTrigger className="w-20">
-                                            <SelectValue placeholder="mm" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            {Array.from(
-                                                { length: 60 },
-                                                (_, i) => {
-                                                    return (
-                                                        <SelectItem
-                                                            key={i}
-                                                            value={`${i}`}
-                                                        >
-                                                            <div className="flex items-center gap-2">
-                                                                <span>
-                                                                    {`${i}`.padStart(
-                                                                        2,
-                                                                        "0",
-                                                                    )}
-                                                                </span>
-                                                            </div>
-                                                        </SelectItem>
-                                                    );
-                                                },
-                                            )}
-                                        </SelectContent>
-                                    </Select>
-                                </div>
+                                <DateTimePicker
+                                    date={
+                                        fields.publishedAt.value
+                                            ? new Date(fields.publishedAt.value)
+                                            : new Date()
+                                    }
+                                    setDate={(date) => {
+                                        publishedAt.change(date.toISOString());
+                                    }}
+                                    // defaultDate={
+                                    //     fields.publishedAt.value
+                                    //         ? new Date(fields.publishedAt.value)
+                                    //         : new Date()
+                                    // }
+                                />
                             </div>
 
                             <div className="grid w-full items-center gap-2">
                                 <Label htmlFor="title">カテゴリ</Label>
-                                <Select>
+                                <Select
+                                    onValueChange={(v) => categoryId.change(v)}
+                                >
                                     <SelectTrigger className="w-full">
                                         <SelectValue placeholder="投稿する学科" />
                                     </SelectTrigger>
@@ -241,7 +226,7 @@ export default function Articles() {
                                             return (
                                                 <SelectItem
                                                     key={index}
-                                                    value={item.name}
+                                                    value={`${item.id}`}
                                                 >
                                                     <div className="flex items-center gap-2">
                                                         <span>{item.name}</span>
@@ -257,6 +242,6 @@ export default function Articles() {
                 </main>
             </div>
             <Footer />
-        </>
+        </Form>
     );
 }

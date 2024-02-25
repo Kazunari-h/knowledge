@@ -12,8 +12,8 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover";
 
-export function DatePicker() {
-    const [date, setDate] = useState<Date>();
+export function DatePicker({ defaultDate }: { defaultDate: Date | null }) {
+    const [date, setDate] = useState<Date>(defaultDate ?? new Date());
     const [calendarOpen, setCalendarOpen] = useState(false);
 
     return (
