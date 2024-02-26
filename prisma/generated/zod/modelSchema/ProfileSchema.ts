@@ -6,19 +6,6 @@ import { UserWithRelationsSchema } from "./UserSchema";
 import { UserPartialWithRelationsSchema } from "./UserSchema";
 import { UserOptionalDefaultsWithRelationsSchema } from "./UserSchema";
 
-import { zodI18nMap } from "zod-i18n-map";
-import translation from "zod-i18n-map/locales/ja/zod.json";
-import { init } from "i18next";
-
-init({
-    lng: "ja",
-    resources: {
-        ja: { translation },
-    },
-});
-
-z.setErrorMap(zodI18nMap);
-
 /////////////////////////////////////////
 // PROFILE SCHEMA
 /////////////////////////////////////////

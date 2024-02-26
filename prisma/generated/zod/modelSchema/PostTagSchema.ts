@@ -12,19 +12,6 @@ import { TagWithRelationsSchema } from "./TagSchema";
 import { TagPartialWithRelationsSchema } from "./TagSchema";
 import { TagOptionalDefaultsWithRelationsSchema } from "./TagSchema";
 
-import { zodI18nMap } from "zod-i18n-map";
-import translation from "zod-i18n-map/locales/ja/zod.json";
-import { init } from "i18next";
-
-init({
-    lng: "ja",
-    resources: {
-        ja: { translation },
-    },
-});
-
-z.setErrorMap(zodI18nMap);
-
 /////////////////////////////////////////
 // POST TAG SCHEMA
 /////////////////////////////////////////

@@ -1,10 +1,8 @@
 import type { LinksFunction, LoaderFunction } from "@remix-run/cloudflare";
-import { useState } from "react";
 import { useLoaderData, useNavigate, Form } from "@remix-run/react";
 import { ArrowLeft } from "lucide-react";
 
 import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -16,7 +14,6 @@ import {
 } from "@/components/ui/select";
 
 import { TooltipButton } from "~/components/TooltipButton";
-import { DatePicker } from "~/components/DatePicker";
 import { DateTimePicker } from "~/components/DateTimePicker";
 import { Footer } from "~/components/Footer";
 
@@ -31,7 +28,6 @@ import {
     useInputControl,
     getFormProps,
     getInputProps,
-    getTextareaProps,
 } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
 import { PostSchema } from "../../prisma/generated/zod/modelSchema/PostSchema";
@@ -74,6 +70,8 @@ export default function Articles() {
     const navigate = useNavigate();
 
     const [form, fields] = useForm({
+        shouldValidate: "onBlur",
+        shouldRevalidate: "onInput",
         onValidate({ formData }) {
             return parseWithZod(formData, { schema: PostSchema });
         },
@@ -83,6 +81,11 @@ export default function Articles() {
     const content = useInputControl(fields.content);
     const publishedAt = useInputControl(fields.publishedAt);
     const categoryId = useInputControl(fields.categoryId);
+
+    console.log("errors", fields.title.errors);
+    console.log("errors", fields.content.errors);
+    console.log("errors", fields.publishedAt.errors);
+    console.log("errors", fields.categoryId.errors);
 
     return (
         <Form
@@ -118,7 +121,18 @@ export default function Articles() {
                     <Button className="rounded-full bg-teal-500">
                         下書き保存
                     </Button>
-                    <Button className="rounded-full bg-cyan-500">
+                    <Button
+                        disabled={
+                            !!(
+                                fields.title.errors ||
+                                fields.content.errors ||
+                                fields.publishedAt.errors ||
+                                fields.categoryId.errors
+                            )
+                        }
+                        {...form.validate.getButtonProps()}
+                        className="rounded-full bg-cyan-500"
+                    >
                         公開する
                     </Button>
                 </div>
