@@ -1,6 +1,6 @@
 import type { LinksFunction, LoaderFunction } from "@remix-run/cloudflare";
 import { useLoaderData, useNavigate, Form } from "@remix-run/react";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, AlertCircle } from "lucide-react";
 
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -12,6 +12,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 import { TooltipButton } from "~/components/TooltipButton";
 import { DateTimePicker } from "~/components/DateTimePicker";
@@ -252,6 +253,18 @@ export default function Articles() {
                                 </Select>
                             </div>
                         </div>
+                    </div>
+                    <div className=" mt-6">
+                        <Alert
+                            variant="destructive"
+                            className="rounded-lg bg-rose-100"
+                        >
+                            <AlertCircle className="h-4 w-4" />
+                            <AlertTitle>エラーが発生しました。</AlertTitle>
+                            <AlertDescription>
+                                全ての項目を入力してください。
+                            </AlertDescription>
+                        </Alert>
                     </div>
                 </main>
             </div>
