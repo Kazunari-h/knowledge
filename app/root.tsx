@@ -16,10 +16,17 @@ import { ClerkApp, ClerkErrorBoundary } from "@clerk/remix";
 
 export const links: LinksFunction = () => [
     { rel: "stylesheet", href: stylesheet },
-    // ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
+    ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
 ];
 
-export const loader: LoaderFunction = (args) => rootAuthLoader(args);
+export const loader: LoaderFunction = (args) => {
+    return rootAuthLoader(args, ({ request }) => {
+        const { userId } = request.auth;
+
+        return { userId };
+    });
+};
+
 export const ErrorBoundary = ClerkErrorBoundary();
 
 function App() {
